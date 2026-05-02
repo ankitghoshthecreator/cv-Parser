@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerConnect | Job Portal Platform</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">CareerConnect</div>
+        <div class="nav-links" id="nav-links">
+            <button onclick="showView('login-view')">Login</button>
+            <button onclick="showView('register-view')">Register</button>
+        </div>
+        <div class="nav-links hidden" id="user-nav">
+            <span id="user-name-display" style="margin-right: 1rem; color: var(--text-gray);"></span>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Landing / Login View -->
+        <section id="login-view" class="view">
+            <div class="auth-card">
+                <h2>Welcome Back</h2>
+                <p style="color: var(--text-gray); margin-bottom: 2rem;">Login with your Gmail account</p>
+                <div class="form-group">
+                    <label>Gmail Address</label>
+                    <input type="email" id="login-email" placeholder="name@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-pass" placeholder="••••••••">
+                </div>
+                <button class="btn-primary" onclick="handleLogin()">Login</button>
+                <p style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem;">
+                    Don't have an account? <a href="#" onclick="showView('register-view')" style="color: var(--primary);">Register</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- Register View -->
+        <section id="register-view" class="view hidden">
+            <div class="auth-card">
+                <h2>Create Account</h2>
+                <p style="color: var(--text-gray); margin-bottom: 1.5rem;">Join as a Student, Employer, or Management</p>
+                
+                <div id="reg-step-1">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="reg-name">
+                    </div>
+                    <div class="form-group">
+                        <label>Gmail Address</label>
+                        <input type="email" id="reg-email" placeholder="name@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number (India)</label>
+                        <input type="tel" id="reg-phone" placeholder="+91">
+                    </div>
+                    <div class="form-group">
+                        <label>I am a...</label>
+                        <select id="reg-role">
+                            <option value="student">Student</option>
+                            <option value="employer">Employer</option>
+                            <option value="management">Management</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="reg-pass">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="reg-confirm">
+                    </div>
+                    <button class="btn-primary" onclick="handleRegister()">Send OTP</button>
+                </div>
+
+                <div id="reg-step-otp" class="hidden">
+                    <p style="margin-bottom: 1rem;">Enter the 6-digit code sent to your Gmail (Check server console).</p>
+                    <div class="form-group">
+                        <input type="text" id="reg-otp" placeholder="123456" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem;">
+                    </div>
+                    <button class="btn-primary" onclick="handleVerifyOTP()">Verify & Register</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Student Dashboard -->
+        <section id="student-view" class="view hidden">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Upload CV</h3>
+                    <p style="color: var(--text-gray); margin-bottom: 1rem;">Upload your latest resume to find matches.</p>
+                    <input type="file" id="cv-upload" accept=".pdf,.docx">
+                    <button class="btn-primary" style="margin-top: 1rem;" onclick="handleCVUpload()">Process CV</button>
+                    <div id="skills-found" style="margin-top: 1rem;"></div>
+                </div>
+
+                <div class="card" style="grid-column: span 2;">
+                    <h3>Recommended Jobs (Top 20)</h3>
+                    <div id="job-recommendations">
+                        <p style="color: var(--text-gray);">Upload your CV to see personalized matches.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Employer Dashboard -->
+        <section id="employer-view" class="view hidden">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Post New Job</h3>
+                    <div class="form-group">
+                        <label>Job Title</label>
+                        <input type="text" id="job-title">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" id="job-cat" placeholder="e.g. Software, Design">
+                    </div>
+                    <div class="form-group">
+                        <label>Required Skills (Comma separated)</label>
+                        <input type="text" id="job-skills" placeholder="Python, React, SQL">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="job-desc" rows="4"></textarea>
+                    </div>
+                    <button class="btn-primary" onclick="handlePostJob()">Post Job</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Management Dashboard -->
+        <section id="management-view" class="view hidden">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2>Management Insights</h2>
+                <button class="btn-primary" style="width: auto; padding: 0.5rem 1.5rem;" onclick="downloadReport()">Download PDF Report</button>
+            </header>
+            
+            <div class="card">
+                <h3>Skill Gap Analysis</h3>
+                <p style="color: var(--text-gray); margin-bottom: 2rem;">Visualizing the gap between employer needs and student skills.</p>
+                <div id="gap-analytics-list">
+                    <!-- Analytics will be injected here -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
